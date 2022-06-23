@@ -1,0 +1,199 @@
+---
+title: "Introduction to Spatial data in R"
+author: "ESTP Use of R in Official Statistics"
+output:
+  beamer_presentation:
+    includes:
+      in_header: ../header.tex
+editor_options: 
+  chunk_output_type: console
+---
+  
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo=FALSE,
+  out.width="70%",
+  fig.showtext=TRUE,
+  fig.align="center"
+)
+```
+
+
+
+## Spatial data
+
+Data often has a spatial component:
+  
+- differences in income between municipalities/neighborhoods
+- population density
+- companies, high tech, agricultural
+- road density
+- mobility, migration
+- land use etc.
+
+You are often interested in (the relevance of) areas or locations.
+
+## GIS
+
+- Software for geographical data is called GIS.
+- _Geographical Information Systems_
+- Broad umbrella term for spatial analysis, processing and *cartography*
+- Cartography is only part of this
+
+
+## Software
+
+- Desktop GIS software: ArcGIS (ESRI), QGIS, GRASS
+- Python (libraries: geopandas, shapely, pyproj, geojson, etc.)
+- R (libraries: sf, terra, stars, tmap, mapview, etc.)
+
+## R Spatial
+
+- Group of developers of spatial data analysis R packages
+- Main persons: Roger Bivand, Edzer Pebesma, and Robert Hijmans
+- Large community (active on GitHub and StackOverflow)
+
+
+
+## Spatial vector data
+
+Spatial vector data represent spatial objects:
+
+### Example vector data
+
+\includegraphics[width=0.5\textwidth]{fig/vector-data-model-1.png}
+
+One feature (row in the data) may contain several points/lines/polygons.
+
+
+## Spatial raster data
+
+Spatial raster data represent spatial phenomena using a continuous grid of cells
+
+### Basic representation
+
+\includegraphics[width=0.7\textwidth]{fig/raster-intro-1.png}
+
+## Types of raster grids
+
+Raster data does not have to be regular
+
+\begin{block}{Types of data grids}
+\includegraphics[width=0.9\textwidth]{fig/grid-types-1.png}
+\end{block}
+
+Non-regular grids are typically obtained after reprojection (more on this later)
+
+##
+
+A satellite image is an example of raster data
+
+\includegraphics[width=0.7\textwidth]{fig/rgb-raster-1.png}
+
+It shows the three color bands and a composite image using the three bands
+
+
+## Spatio-temporal data
+
+- Spatio-temporal data are spatial data with a time dimension
+- These data are used for spatial data analysis over time
+- Such data can be stored in a data cube
+
+
+## Raster data cube
+
+\includegraphics[width=0.7\textwidth]{fig/raster-data-cubes-1.png}
+
+Example: weather data with attributes: temperature, preceptation, and air pressure
+
+
+## Vector data cube
+
+\includegraphics[width=0.7\textwidth]{fig/vector-data-cubes-1.png}
+
+Example: land use percentages grouped by administrative region
+
+
+
+## Map projections (CRS)
+
+How to flatten a three dimensional object?
+
+\includegraphics[width=0.7\textwidth]{fig/orange_world.png}
+
+## One approach to flatten the Earth
+
+\includegraphics[width=0.7\textwidth]{fig/crs-goode-1.png}
+
+Formally known as the _Goode homolosien projection_
+
+
+## CRS: coordinate reference system
+
+- The CRS (coordinate reference system) contains information where each point on earth is located on a two-dimensional map (x-y coordinates)
+- All maps use a CRS
+- E.g. in the Netherlands, this is often the National Triangle System (EPSG: 28992)
+
+
+## CRS: does it matter?
+
+### Yes
+
+\includegraphics[width=0.7\textwidth]{fig/crs-bias-1.png}
+
+Left: Web Mercator (used in many interactive maps)
+Right: Eckert IV projection
+
+For statistical purposes, the second is better
+
+## CRS: main four types
+
+\includegraphics[width=0.7\textwidth]{fig/crs-types-1.png}
+
+## CRS: properties
+
+\scriptsize
+
+| Property | Conformal | Equal area | Equidistant | Azimuthal |
+| --------- | --------- | --------- | --------- | --------- |
+| Preserves	| Local angle (shape) | Area | Distance | Direction |
+| Application |	Navigation, climate	| Statistics | Geology	Geology |
+| Examples (cyclindrical)	| Mercator | Gall-Peters, Eckert IV | Equirectangular	| none |
+| Examples (conic)	| Lambert conformal conic | Albers conic | Equidistant conic | none |
+| Examples (planar)	| Stereographic	| Lambert azimuthal equal-area | Azimuthal equidistant | Stereographic, Lambert azimuthal equal-area |
+| Examples (interrupted)	| Myriahedral	| Goode homolosine, Myriahedral | none | none |
+
+## CRS: World maps
+
+For thematic World maps, pseudo-cylindrical projections are used:
+
+\includegraphics[width=0.7\textwidth]{fig/crs-robin-1.png}
+
+- This is the Robinson projection
+- These projecions are pseudo-cylindrical
+- They are equal-area, important for statistics
+
+
+## Vector data in R: `sf` package
+
+Data is a "data.frame" with an additional "geometry" column.
+
+### read/write
+
+- `st_read` read (many) different formats: geojson, geopackage and shp (ESRI)
+- `st_write` write to different formats
+
+### Manipulate
+
+- `create, modify, association, intersection etc. of" geometry "
+
+### Calculate
+
+- buffer query, interpolation, etc
+
+
+## Raster data in R: `terra` package
+
+
+
+

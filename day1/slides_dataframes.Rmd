@@ -1,0 +1,214 @@
+---
+title: "ESTP R - Descriptive statistics"
+output: 
+  beamer_presentation:
+    includes:
+      in_header: ../header.tex
+editor_options: 
+  chunk_output_type: console
+---
+  
+
+## Data frames
+
+A `data.frame` is a tabular format. Technically, it is a list of vectors of the same length
+
+
+
+```{r}
+str(iris)
+```
+
+
+
+## Data frames summary
+
+\scriptsize
+
+```{r}
+summary(iris)
+```
+
+## Handy functions
+
+\begin{center}
+\begin{tabular}{ll}
+\textbf{Function}                 & \textbf{description}\\
+\code{summary}                   & statistical summary \\
+\code{str}                       & technical summary\\
+\code{colMeans}, \code{rowMeans} & mean per column/row\\
+\code{colSums}, \code{rowSums}   & sum per column/row\\
+\code{names}                     & column names\\
+\code{ncol} \code{nrow}          & number of columns, rows\\
+\code{dim}                       & vector with \code{nrow, ncol}
+\end{tabular}
+\end{center}
+
+## Selecting data
+
+
+### Retrieve colum with `$`
+
+\scriptsize
+
+```{r}
+mean(iris$Sepal.Length)
+# or 
+# number of rows
+nrow(iris)
+colnames(iris)
+```
+
+##
+
+### Retrieve rows with index
+
+\scriptsize
+
+
+```{r}
+# first row (before comma)
+iris[1,]
+
+# row 2, 6 and 3 and column 1 and 2
+iris[c(2,6,3),1:2]
+```
+
+##
+
+### Row filtering
+
+\scriptsize
+
+```{r}
+iris[iris$Species == "versicolor" & iris$Sepal.Length > 6.5, ]
+```
+
+
+
+## Plotting (1)
+
+- The `plot` function is a generic function
+- It depends on the input what kind of data is plotted
+- For numeric data, a scatter plot is created
+
+
+```{r, fig.height=4}
+# scatter plot
+plot(1:10)
+```
+
+##
+
+```{r, fig.height=4}
+
+# line plot
+plot(1:10, type = "l")
+```
+
+
+## Plotting (1)
+
+```{r, fig.height=5}
+plot(weight ~ height, data=women)
+```
+
+
+## Plotting (2)
+
+```{r,fig.height=5}
+plot(count ~ spray, data=InsectSprays)
+```
+
+## Plotting (3)
+
+```{r, fig.height=5}
+hist(iris$Sepal.Length, breaks=20)
+```
+
+
+## Categorical data: `factor`
+
+\scriptsize
+
+
+A `factor` is a vector where $k$ categories have been assigned to indices $1,2,\ldots,k$.
+
+```{r}
+class(iris$Species)
+
+# categories
+levels(iris$Species)
+
+# retrieve indices
+as.integer(iris$Species)
+```
+
+
+## Tabulation 
+
+\scriptsize
+
+### Frequency table
+
+
+```{r}
+table(iris$Species)
+```
+
+### Cross tabulation
+
+```{r}
+iris$Sepal.Length.Class = cut(iris$Sepal.Length, breaks = 4:8)
+table(iris$Species, iris$Sepal.Length.Class)
+```
+
+## Missing data
+
+* Missing values are represented with `NA`
+* `is.na()` checks for missing values
+* `which()` returns indices
+
+
+### Example
+
+\scriptsize
+
+```{r}
+x <- c(3, 4, 6, NA, 3, NA)
+
+is.na(x)
+
+which(is.na(x))
+```
+
+## Missing data (2)
+
+* `na.omit()` returns the vector without `NA` values
+
+### Example
+
+```{r}
+na.omit(x)
+
+# is the same as
+x[!is.na(x)]
+
+```
+
+## Missing data (3)
+
+* Most functions have a `na.rm` argument
+
+### Example
+
+```{r}
+sum(x)
+
+sum(x, na.rm = TRUE)
+```
+
+
+
+
+
